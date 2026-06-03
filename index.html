@@ -42,7 +42,9 @@ section{padding:96px max(24px,5vw)}
 .inner{max-width:1100px;margin:0 auto}
 
 /* ── HERO ── */
-#hero{padding-top:140px;padding-bottom:80px;min-height:100vh;display:flex;align-items:center}
+#hero{position:relative;overflow:hidden;padding-top:140px;padding-bottom:80px;min-height:100vh;display:flex;align-items:center}
+#hero .inner{position:relative;z-index:2;width:100%}
+#neuralCanvas{position:absolute;top:0;left:0;width:100%;height:100%;z-index:1;pointer-events:none;opacity:0.6}
 .hero-grid{display:grid;grid-template-columns:1fr 360px;gap:60px;align-items:center;width:100%}
 .hero-eyebrow{font-family:'DM Mono',monospace;font-size:11px;letter-spacing:3px;color:var(--muted);text-transform:uppercase;margin-bottom:20px;display:flex;align-items:center;gap:10px}
 .hero-eyebrow::before{content:'';display:block;width:24px;height:1px;background:var(--muted)}
@@ -105,8 +107,33 @@ h2{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(28px,4vw,44px);
 /* ── PROJECTS ── */
 #projects{background:var(--bg)}
 .projects-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:20px}
-.proj-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:all 0.25s;cursor:pointer;position:relative}
-.proj-card:hover{transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,0,0,0.08);border-color:#c8c6bf}
+.proj-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  overflow:hidden;
+  transition:transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor:pointer;
+  position:relative;
+  will-change:transform, box-shadow;
+}
+.proj-card::before{
+  content:'';
+  position:absolute;
+  top:0;left:0;right:0;bottom:0;
+  background:radial-gradient(800px circle at var(--mouse-x, 0px) var(--mouse-y, 0px), rgba(26,26,24,0.03), transparent 40%);
+  z-index:1;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity 0.4s ease;
+}
+.proj-card:hover::before{opacity:1}
+.proj-card > *{position:relative;z-index:2}
+.proj-card:hover{
+  transform:translateY(-5px);
+  box-shadow:0 20px 40px rgba(26,26,24,0.08);
+  border-color:rgba(26,26,24,0.3);
+}
 .proj-header{padding:24px 24px 0}
 .proj-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}
 .proj-badge{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:1px;padding:3px 10px;border-radius:99px;border:1px solid;text-transform:uppercase}
@@ -193,8 +220,13 @@ footer p{font-family:'DM Mono',monospace;font-size:11px;color:rgba(255,255,255,0
 }
 
 /* scroll fade-in */
-.fade-in{opacity:0;transform:translateY(20px);transition:opacity 0.6s ease,transform 0.6s ease}
-.fade-in.visible{opacity:1;transform:none}
+.fade-in{
+  opacity:0;
+  transform:translateY(30px) scale(0.98);
+  transition:opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change:transform, opacity;
+}
+.fade-in.visible{opacity:1;transform:translateY(0) scale(1)}
 </style>
 </head>
 <body>
@@ -216,6 +248,7 @@ footer p{font-family:'DM Mono',monospace;font-size:11px;color:rgba(255,255,255,0
 
 <!-- HERO -->
 <section id="hero">
+  <canvas id="neuralCanvas"></canvas>
   <div class="inner">
     <div class="hero-grid">
       <div>
@@ -249,17 +282,17 @@ footer p{font-family:'DM Mono',monospace;font-size:11px;color:rgba(255,255,255,0
           <span class="term-title">bhanuj@ml-system ~</span>
         </div>
         <div class="term-body">
-          <span class="term-line"><span class="term-prompt">→</span> whoami</span>
-          <span class="term-line" style="padding-left:12px;color:rgba(255,255,255,0.85)">bhanuj_bhalla</span>
-          <span class="term-line" style="margin-top:10px"><span class="term-prompt">→</span> cat profile.json</span>
-          <span class="term-line" style="color:rgba(255,255,255,0.4)">{</span>
-          <span class="term-line" style="padding-left:12px"><span class="term-key">"role"</span><span style="color:rgba(255,255,255,0.4)">: </span><span class="term-val">"AI/ML Engineer"</span><span style="color:rgba(255,255,255,0.4)">,</span></span>
-          <span class="term-line" style="padding-left:12px"><span class="term-key">"batch"</span><span style="color:rgba(255,255,255,0.4)">: </span><span class="term-val">"B.Tech CS '27"</span><span style="color:rgba(255,255,255,0.4)">,</span></span>
-          <span class="term-line" style="padding-left:12px"><span class="term-key">"p95_latency"</span><span style="color:rgba(255,255,255,0.4)">: </span><span class="term-val">"&lt;10ms"</span><span style="color:rgba(255,255,255,0.4)">,</span></span>
-          <span class="term-line" style="padding-left:12px"><span class="term-key">"stack"</span><span style="color:rgba(255,255,255,0.4)">: </span><span class="term-val">["Kafka","Feast","MLflow"]</span></span>
-          <span class="term-line" style="color:rgba(255,255,255,0.4)">}</span>
-          <span class="term-line" style="margin-top:10px"><span class="term-prompt">→</span> <span class="term-comment"># open to SWE · ML · AI roles</span></span>
-          <span class="term-line"><span class="term-prompt">→</span> <span class="term-cursor"></span></span>
+          <span class="term-line"><span class="term-prompt">→</span> <span id="termCmd1"></span><span class="term-cursor" id="termCursor1"></span></span>
+          <span class="term-line" id="termOut1" style="padding-left:12px;color:rgba(255,255,255,0.85);display:none">bhanuj_bhalla</span>
+          <span class="term-line" id="termLine2" style="margin-top:10px;display:none"><span class="term-prompt">→</span> <span id="termCmd2"></span><span class="term-cursor" id="termCursor2"></span></span>
+          <span class="term-line" id="termJsonOpen" style="color:rgba(255,255,255,0.4);display:none">{</span>
+          <span class="term-line" id="termJson1" style="padding-left:12px;display:none"><span class="term-key">"role"</span><span style="color:rgba(255,255,255,0.4)">: </span><span class="term-val">"AI/ML Engineer"</span><span style="color:rgba(255,255,255,0.4)">,</span></span>
+          <span class="term-line" id="termJson2" style="padding-left:12px;display:none"><span class="term-key">"batch"</span><span style="color:rgba(255,255,255,0.4)">: </span><span class="term-val">"B.Tech CS '27"</span><span style="color:rgba(255,255,255,0.4)">,</span></span>
+          <span class="term-line" id="termJson3" style="padding-left:12px;display:none"><span class="term-key">"p95_latency"</span><span style="color:rgba(255,255,255,0.4)">: </span><span class="term-val">"&lt;10ms"</span><span style="color:rgba(255,255,255,0.4)">,</span></span>
+          <span class="term-line" id="termJson4" style="padding-left:12px;display:none"><span class="term-key">"stack"</span><span style="color:rgba(255,255,255,0.4)">: </span><span class="term-val">["Kafka","Feast","MLflow"]</span></span>
+          <span class="term-line" id="termJsonClose" style="color:rgba(255,255,255,0.4);display:none">}</span>
+          <span class="term-line" id="termComment" style="margin-top:10px;display:none"><span class="term-prompt">→</span> <span class="term-comment"># open to SWE · ML · AI roles</span></span>
+          <span class="term-line" id="termFinal" style="display:none"><span class="term-prompt">→</span> <span class="term-cursor"></span></span>
         </div>
       </div>
     </div>
@@ -539,72 +572,72 @@ footer p{font-family:'DM Mono',monospace;font-size:11px;color:rgba(255,255,255,0
           <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;margin-bottom:16px">Topic breakdown</div>
           <div class="lc-topic-row">
             <span class="lc-topic-name">Array</span>
-            <div class="lc-bar-track"><div class="lc-bar-fill" style="width:100%"></div></div>
+            <div class="lc-bar-track"><div class="lc-bar-fill" data-width="100%" style="width:0%"></div></div>
             <span class="lc-topic-count">184</span>
           </div>
           <div class="lc-topic-row">
             <span class="lc-topic-name">String</span>
-            <div class="lc-bar-track"><div class="lc-bar-fill" style="width:42%"></div></div>
+            <div class="lc-bar-track"><div class="lc-bar-fill" data-width="42%" style="width:0%"></div></div>
             <span class="lc-topic-count">78</span>
           </div>
           <div class="lc-topic-row">
             <span class="lc-topic-name">Hash Table</span>
-            <div class="lc-bar-track"><div class="lc-bar-fill" style="width:38%"></div></div>
+            <div class="lc-bar-track"><div class="lc-bar-fill" data-width="38%" style="width:0%"></div></div>
             <span class="lc-topic-count">70</span>
           </div>
           <div class="lc-topic-row">
             <span class="lc-topic-name">Dynamic Prog.</span>
-            <div class="lc-bar-track"><div class="lc-bar-fill" style="width:28%"></div></div>
+            <div class="lc-bar-track"><div class="lc-bar-fill" data-width="28%" style="width:0%"></div></div>
             <span class="lc-topic-count">52</span>
           </div>
           <div class="lc-topic-row">
             <span class="lc-topic-name">Two Pointers</span>
-            <div class="lc-bar-track"><div class="lc-bar-fill" style="width:28%"></div></div>
+            <div class="lc-bar-track"><div class="lc-bar-fill" data-width="28%" style="width:0%"></div></div>
             <span class="lc-topic-count">51</span>
           </div>
           <div class="lc-topic-row">
             <span class="lc-topic-name">Sorting</span>
-            <div class="lc-bar-track"><div class="lc-bar-fill" style="width:26%"></div></div>
+            <div class="lc-bar-track"><div class="lc-bar-fill" data-width="26%" style="width:0%"></div></div>
             <span class="lc-topic-count">48</span>
           </div>
           <div class="lc-topic-row">
             <span class="lc-topic-name">Depth-First Search</span>
-            <div class="lc-bar-track"><div class="lc-bar-fill" style="width:23%"></div></div>
+            <div class="lc-bar-track"><div class="lc-bar-fill" data-width="23%" style="width:0%"></div></div>
             <span class="lc-topic-count">42</span>
           </div>
           <div class="lc-topic-row">
             <span class="lc-topic-name">Tree / Binary Tree</span>
-            <div class="lc-bar-track"><div class="lc-bar-fill" style="width:22%"></div></div>
+            <div class="lc-bar-track"><div class="lc-bar-fill" data-width="22%" style="width:0%"></div></div>
             <span class="lc-topic-count">40</span>
           </div>
           <div class="lc-topic-row">
             <span class="lc-topic-name">Binary Search</span>
-            <div class="lc-bar-track"><div class="lc-bar-fill" style="width:21%"></div></div>
+            <div class="lc-bar-track"><div class="lc-bar-fill" data-width="21%" style="width:0%"></div></div>
             <span class="lc-topic-count">38</span>
           </div>
           <div class="lc-topic-row">
             <span class="lc-topic-name">Stack</span>
-            <div class="lc-bar-track"><div class="lc-bar-fill" style="width:18%"></div></div>
+            <div class="lc-bar-track"><div class="lc-bar-fill" data-width="18%" style="width:0%"></div></div>
             <span class="lc-topic-count">33</span>
           </div>
           <div class="lc-topic-row">
             <span class="lc-topic-name">Greedy</span>
-            <div class="lc-bar-track"><div class="lc-bar-fill" style="width:16%"></div></div>
+            <div class="lc-bar-track"><div class="lc-bar-fill" data-width="16%" style="width:0%"></div></div>
             <span class="lc-topic-count">30</span>
           </div>
           <div class="lc-topic-row">
             <span class="lc-topic-name">Linked List</span>
-            <div class="lc-bar-track"><div class="lc-bar-fill" style="width:17%"></div></div>
+            <div class="lc-bar-track"><div class="lc-bar-fill" data-width="17%" style="width:0%"></div></div>
             <span class="lc-topic-count">31</span>
           </div>
           <div class="lc-topic-row">
             <span class="lc-topic-name">BFS</span>
-            <div class="lc-bar-track"><div class="lc-bar-fill" style="width:16%"></div></div>
+            <div class="lc-bar-track"><div class="lc-bar-fill" data-width="16%" style="width:0%"></div></div>
             <span class="lc-topic-count">29</span>
           </div>
           <div class="lc-topic-row">
             <span class="lc-topic-name">Backtracking</span>
-            <div class="lc-bar-track"><div class="lc-bar-fill" style="width:9%"></div></div>
+            <div class="lc-bar-track"><div class="lc-bar-fill" data-width="9%" style="width:0%"></div></div>
             <span class="lc-topic-count">17</span>
           </div>
         </div>
@@ -703,6 +736,175 @@ footer p{font-family:'DM Mono',monospace;font-size:11px;color:rgba(255,255,255,0
 </footer>
 
 <script>
+// Neural Network Canvas Background
+(function() {
+  const canvas = document.getElementById('neuralCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  
+  let width = canvas.width = canvas.offsetWidth;
+  let height = canvas.height = canvas.offsetHeight;
+  
+  window.addEventListener('resize', () => {
+    width = canvas.width = canvas.offsetWidth;
+    height = canvas.height = canvas.offsetHeight;
+  });
+  
+  const particles = [];
+  const maxParticles = 60;
+  const connectionDist = 120;
+  
+  let mouse = { x: null, y: null, radius: 150 };
+  window.addEventListener('mousemove', (e) => {
+    const rect = canvas.getBoundingClientRect();
+    mouse.x = e.clientX - rect.left;
+    mouse.y = e.clientY - rect.top;
+  });
+  
+  window.addEventListener('mouseleave', () => {
+    mouse.x = null;
+    mouse.y = null;
+  });
+  
+  class Particle {
+    constructor() {
+      this.x = Math.random() * width;
+      this.y = Math.random() * height;
+      this.vx = (Math.random() - 0.5) * 0.4;
+      this.vy = (Math.random() - 0.5) * 0.4;
+      this.radius = Math.random() * 2 + 1;
+    }
+    
+    update() {
+      this.x += this.vx;
+      this.y += this.vy;
+      
+      if (this.x < 0 || this.x > width) this.vx *= -1;
+      if (this.y < 0 || this.y > height) this.vy *= -1;
+      
+      if (mouse.x !== null && mouse.y !== null) {
+        const dx = this.x - mouse.x;
+        const dy = this.y - mouse.y;
+        const dist = Math.hypot(dx, dy);
+        if (dist < mouse.radius) {
+          const force = (mouse.radius - dist) / mouse.radius;
+          const angle = Math.atan2(dy, dx);
+          this.x += Math.cos(angle) * force * 1.2;
+          this.y += Math.sin(angle) * force * 1.2;
+        }
+      }
+    }
+    
+    draw() {
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(26, 26, 24, 0.15)';
+      ctx.fill();
+    }
+  }
+  
+  for (let i = 0; i < maxParticles; i++) {
+    particles.push(new Particle());
+  }
+  
+  function animate() {
+    ctx.clearRect(0, 0, width, height);
+    
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.hypot(dx, dy);
+        
+        if (dist < connectionDist) {
+          const alpha = (1 - dist / connectionDist) * 0.12;
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = `rgba(26, 26, 24, ${alpha})`;
+          ctx.lineWidth = 0.8;
+          ctx.stroke();
+        }
+      }
+    }
+    
+    particles.forEach(p => {
+      p.update();
+      p.draw();
+    });
+    
+    requestAnimationFrame(animate);
+  }
+  
+  animate();
+})();
+
+// Terminal Typing Animation
+(function() {
+  const cmd1 = document.getElementById('termCmd1');
+  const cmd2 = document.getElementById('termCmd2');
+  if (!cmd1 || !cmd2) return;
+  
+  const text1 = 'whoami';
+  const text2 = 'cat profile.json';
+  
+  function typeText(element, text, speed, callback) {
+    let i = 0;
+    function type() {
+      if (i < text.length) {
+        element.textContent += text.charAt(i);
+        i++;
+        setTimeout(type, speed);
+      } else if (callback) {
+        callback();
+      }
+    }
+    type();
+  }
+  
+  // Start typing sequence
+  setTimeout(() => {
+    typeText(cmd1, text1, 80, () => {
+      document.getElementById('termCursor1').style.display = 'none';
+      document.getElementById('termOut1').style.display = 'block';
+      
+      setTimeout(() => {
+        document.getElementById('termLine2').style.display = 'block';
+        typeText(cmd2, text2, 80, () => {
+          document.getElementById('termCursor2').style.display = 'none';
+          
+          const jsonLines = ['termJsonOpen', 'termJson1', 'termJson2', 'termJson3', 'termJson4', 'termJsonClose'];
+          let delay = 100;
+          jsonLines.forEach((id, idx) => {
+            setTimeout(() => {
+              document.getElementById(id).style.display = 'block';
+              if (idx === jsonLines.length - 1) {
+                setTimeout(() => {
+                  document.getElementById('termComment').style.display = 'block';
+                  setTimeout(() => {
+                    document.getElementById('termFinal').style.display = 'block';
+                  }, 400);
+                }, 400);
+              }
+            }, idx * delay);
+          });
+        });
+      }, 500);
+    });
+  }, 800);
+})();
+
+// Project cards hover glow tracking
+document.querySelectorAll('.proj-card').forEach(card => {
+  card.addEventListener('mousemove', (e) => {
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    card.style.setProperty('--mouse-x', `${x}px`);
+    card.style.setProperty('--mouse-y', `${y}px`);
+  });
+});
+
 // Generate contribution grid
 const grid = document.getElementById('ghGrid');
 if(grid){
@@ -723,9 +925,20 @@ if(grid){
   }
 }
 
-// Scroll fade-in
+// Scroll fade-in & LeetCode bar reveal observer
 const obs=new IntersectionObserver((entries)=>{
-  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}});
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('visible');
+      if(e.target.classList.contains('lc-wrapper')){
+        const bars=e.target.querySelectorAll('.lc-bar-fill');
+        bars.forEach(bar=>{
+          bar.style.width=bar.getAttribute('data-width');
+        });
+      }
+      obs.unobserve(e.target);
+    }
+  });
 },{threshold:0.1});
 document.querySelectorAll('.fade-in').forEach(el=>obs.observe(el));
 
