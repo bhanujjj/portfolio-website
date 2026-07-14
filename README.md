@@ -16,7 +16,7 @@ Welcome to my portfolio! I am an AI/ML Engineer shipping production-grade system
 
 ## 🛠️ Tech Stack
 - **Languages & CS**: Python, C/C++, SQL, DSA, System Design, Linux, Go (learning)
-- **AI / ML**: PyTorch, TensorFlow, Deep Learning, CNN, Scikit-learn, LangGraph, LangChain, LlamaIndex, Transformers, Hugging Face, RAG, Agentic AI, FAISS, Chroma, NLP/NLU
+- **AI / ML**: PyTorch, TensorFlow, Deep Learning, Scikit-learn, LangGraph, LangChain, LlamaIndex, Transformers, Hugging Face, RAG, Agentic AI, FAISS, Chroma, LLM, CNN, NLP/NLU
 - **MLOps & Systems**: MLflow, Feast, Prefect, Airflow, Real-Time Inference, Drift Detection, Model Versioning, W&B
 - **Backend & Data**: FastAPI, Node.js, Kafka, Redis, Flask, PostgreSQL, Pandas, REST APIs, Microservices
 - **Infra & DevOps**: Docker, Kubernetes, AWS (EC2, S3), Prometheus, Grafana, CI/CD, GitHub Actions, Jenkins
