@@ -30,6 +30,11 @@ Production ML ranking system with a full feature store, streaming pipeline, mode
 - **Tech Stack**: FastAPI, Feast, Kafka, Redis, MLflow, Prefect, Prometheus, Grafana, GitHub Actions
 - **Key Metrics**: `<10ms` p95 Latency, `100%` CI Coverage, End-to-End MLOps
 
+### 🛡️ [Sentinel — Compliance-Aware Multi-Agent Incident Response System](https://github.com/bhanujjj/Compliance-Aware-Agent-Orchestrator)
+Multi-agent SOC pipeline that clusters raw CIC-IDS2018 alerts into structured incidents, maps them to MITRE ATT&CK via ChromaDB RAG, and gates remediation actions through a deterministic Policy Engine.
+- **Tech Stack**: Python, ChromaDB, Random Forest, Agentic AI, MCP
+- **Key Metrics**: `90%` of out-of-policy actions caught, `0.71ms` guardrail latency
+
 ### 💳 [Payment Agentic AI — Autonomous Ops Agent](https://github.com/bhanujjj/payment-agentic-ai)
 Closed-loop autonomous agent that observes payment system health, reasons over anomalies, executes remediations, and learns from outcomes.
 - **Tech Stack**: Python, Gemini, LangGraph, Agentic AI, ReAct
@@ -39,11 +44,6 @@ Closed-loop autonomous agent that observes payment system health, reasons over a
 White-label LLM chatbot deployable across multiple brands with isolated semantic search indexes.
 - **Tech Stack**: FastAPI, Node.js, FAISS, Sentence Transformers, RAG
 - **Key Metrics**: Zero Cross-Tenant Data Leakage, Multi-Tenant Architecture
-
-### 🛡️ [Sentinel — Compliance-Aware Multi-Agent Incident Response System](https://github.com/bhanujjj/Compliance-Aware-Agent-Orchestrator)
-Multi-agent SOC pipeline that clusters raw CIC-IDS2018 alerts into structured incidents, maps them to MITRE ATT&CK via ChromaDB RAG, and gates remediation actions through a deterministic Policy Engine.
-- **Tech Stack**: Python, ChromaDB, Random Forest, Agentic AI, MCP
-- **Key Metrics**: `90%` of out-of-policy actions caught, `0.71ms` guardrail latency
 
 ### ✉️ AI Email Agent — Event Summarizer & Sender
 Agentic AI system that reads your inbox, extracts and summarizes calendar events, drafts context-aware replies, and sends emails autonomously.
