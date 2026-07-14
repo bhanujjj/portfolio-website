@@ -40,9 +40,10 @@ White-label LLM chatbot deployable across multiple brands with isolated semantic
 - **Tech Stack**: FastAPI, Node.js, FAISS, Sentence Transformers, RAG
 - **Key Metrics**: Zero Cross-Tenant Data Leakage, Multi-Tenant Architecture
 
-### ☁️ CloudScale AI — FinOps Orchestrator
-Autonomous cloud cost optimization system that ingests Prometheus metrics, runs ML-based demand forecasting, and rightsizes Kubernetes workloads.
-- **Tech Stack**: Prometheus, Kafka, Kubernetes, FastAPI, XGBoost
+### 🛡️ [Sentinel — Compliance-Aware Multi-Agent Incident Response System](https://github.com/bhanujjj/Compliance-Aware-Agent-Orchestrator)
+Multi-agent SOC pipeline that clusters raw CIC-IDS2018 alerts into structured incidents, maps them to MITRE ATT&CK via ChromaDB RAG, and gates remediation actions through a deterministic Policy Engine.
+- **Tech Stack**: Python, ChromaDB, Random Forest, Agentic AI, MCP
+- **Key Metrics**: `90%` of out-of-policy actions caught, `0.71ms` guardrail latency
 
 ### ✉️ AI Email Agent — Event Summarizer & Sender
 Agentic AI system that reads your inbox, extracts and summarizes calendar events, drafts context-aware replies, and sends emails autonomously.
