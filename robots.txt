@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://bhanujjj.github.io/portfolio-website/sitemap.xml
